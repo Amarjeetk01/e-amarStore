@@ -10,7 +10,9 @@ Amarstore is a web application for online shopping, featuring authentication pow
    ```bash
    cd amarstore
    npm install
-Additional Steps:
+   Additional Steps:
+   ```
+
 - Set up environment variables (e.g., API keys for Clerk and Stripe).
 - Configure Clerk and Stripe according to their documentation.
 
@@ -20,7 +22,7 @@ Additional Steps:
 
 To run the application in development mode:
 
-```bash
+````bash
 npm run dev
 
 
@@ -51,3 +53,4 @@ npm run lint
 * Stripe for payment integration
 * Other dependencies include: react-hook-form, recharts, and zod
 
+````
