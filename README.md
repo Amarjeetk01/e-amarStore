@@ -53,6 +53,6 @@ npm run lint
 * Tailwind CSS
 * Clerk for authentication
 * Stripe for payment integration
-* Other dependencies include: react-hook-form, recharts, and zod
+* Other dependencies include: react-hook-form, and recharts
 
 ````
