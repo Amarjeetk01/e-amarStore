@@ -137,7 +137,7 @@ const Cart = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-4 items-center">
+                      <div className="flex gap-4 items-center mr-4">
                         <MinusCircle
                           className="hover:text-red-1 cursor-pointer"
                           onClick={() =>
@@ -160,7 +160,7 @@ const Cart = () => {
                       </div>
 
                       <Trash
-                        className="hover:text-red-1 cursor-pointer"
+                        className="hover:text-red-1 cursor-pointer mr-1"
                         onClick={() => handleRemove(cartItem.product._id)}
                       />
                     </div>

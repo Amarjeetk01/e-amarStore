@@ -61,7 +61,7 @@ export const GET = async (req: NextRequest) => {
       .select("-updatedAt -__v");
     return NextResponse.json(carts, { status: 200 });
   } catch (err) {
-    console.log("[cart_POST", err);
+    console.log("[cart_GET]", err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 };

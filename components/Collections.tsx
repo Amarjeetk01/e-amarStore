@@ -1,12 +1,30 @@
-
-import { getCollections } from "@/lib/user-action/actions";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import Loader from "./custom-ui/Loader";
 
-const Collections = async () => {
-  const collections = await getCollections();
+const Collections = () => {
+  const [loading,setLoading]=useState(true)
+  const [collections,setCollections]=useState<any>(null)
+  const getCollection= async ()=>{
+    try{
+      const res=await fetch(`/api/collections`)
+      if(!res.ok){
+        throw new Error("Failed to fetch collections data");
+      }
+      const data= await res.json()
+      setCollections(data)
+    }catch(err){
+      console.log("[collection_get]",err)
+    }finally{
+      setLoading(false)
+    }
+  }
+  useEffect(()=>{
+    getCollection()
+  },[])
 
-  return (
+  return loading?(<Loader/>): (
     <div className="flex flex-col items-center gap-10 py-8 px-5">
       <p className="text-heading1-bold">Collections</p>
       {!collections || collections.length === 0 ? (

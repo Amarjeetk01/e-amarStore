@@ -15,6 +15,7 @@ import {
 
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
+import { useFetchUser } from "@/lib/hook/useFetchUser";
 
 interface DeleteProps {
   item: string;
@@ -28,31 +29,12 @@ type CustomUserType = {
 
 const Delete: React.FC<DeleteProps> = ({ item, id }) => {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<CustomUserType | null>(null);
-
-  const getUser = async () => {
-    try {
-      const res = await fetch('/api/users', {
-        method: "GET",
-      });
-      const data = await res.json();
-      setUser(data);
-    } catch (err) {
-      console.log("[users_GET]", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
-
+  const { user } = useFetchUser();
 
   const handleDelete = async () => {
     console.log(`Deleting ${item} with ID ${id}`);
     try {
-      if (user && user.role !== 'admin') {
+      if (user && user.role !== "admin") {
         toast.error("You are not authorized to delete or update.");
       } else {
         setLoading(true);
@@ -74,7 +56,6 @@ const Delete: React.FC<DeleteProps> = ({ item, id }) => {
       toast.error("Something went wrong! Please try again.");
     }
   };
-  
 
   return (
     <AlertDialog>

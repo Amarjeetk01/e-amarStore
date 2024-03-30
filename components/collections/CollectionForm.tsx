@@ -17,10 +17,11 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "../ui/textarea";
 import ImageUpload from "../custom-ui/ImageUpload";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import Delete from "../custom-ui/Delete";
 import Loader from "../custom-ui/Loader";
+import { useFetchUser } from "@/lib/hook/useFetchUser";
 
 const formSchema = z.object({
   title: z.string().min(2).max(20),
@@ -28,15 +29,15 @@ const formSchema = z.object({
   image: z.string(),
 });
 
-interface CollectionFormsProps{
-  initialData?:CollectionType | null;
+interface CollectionFormsProps {
+  initialData?: CollectionType | null;
 }
 type CustomUserType = {
   clerkId: string;
   role: string;
 };
 
-const CollectionForm: React.FC<CollectionFormsProps> = ({initialData}) => {
+const CollectionForm: React.FC<CollectionFormsProps> = ({ initialData }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -50,39 +51,27 @@ const CollectionForm: React.FC<CollectionFormsProps> = ({initialData}) => {
         },
   });
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyPress = (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     if (e.key === "Enter") {
       e.preventDefault();
     }
-  }
-
-  const [user, setUser] = useState<CustomUserType | null>(null);
-
-  const getUser = async () => {
-    try {
-      const res = await fetch('/api/users', {
-        method: "GET",
-      });
-      const data = await res.json();
-      setUser(data);
-    } catch (err) {
-      console.log("[users_GET]", err);
-    } finally {
-      setLoading(false);
-    }
   };
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  const { user } = useFetchUser();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (user && user.role !== 'admin') {
+    if (user && user.role !== "admin") {
       toast.error("You are not authorized to delete or update.");
     } else {
       try {
         setLoading(true);
-        const url = initialData ? `/api/collections/${initialData._id}` : "/api/collections";
+        const url = initialData
+          ? `/api/collections/${initialData._id}`
+          : "/api/collections";
         const res = await fetch(url, {
           method: "POST",
           body: JSON.stringify(values),
@@ -91,10 +80,12 @@ const CollectionForm: React.FC<CollectionFormsProps> = ({initialData}) => {
           setLoading(false);
           toast.success(`Collection ${initialData ? "updated" : "created"} `);
           window.location.href = "/admin/collections";
-          router.push('/admin/collections');
+          router.push("/admin/collections");
         } else {
           setLoading(false);
-          toast.error(`Failed to ${initialData ? "update" : "create"} collection.`);
+          toast.error(
+            `Failed to ${initialData ? "update" : "create"} collection.`
+          );
         }
       } catch (err) {
         setLoading(false);
@@ -103,87 +94,95 @@ const CollectionForm: React.FC<CollectionFormsProps> = ({initialData}) => {
       }
     }
   };
-  
-  
+
   return (
-    <>{
-      loading?(<Loader/>):(
-    <div className="p-10">
-         {initialData ? (
-        <div className="flex items-center justify-between">
-          <p className="text-heading2-bold">Edit Collection</p>
-          <Delete id={initialData._id} item="collection"/>
-        </div>
+    <>
+      {loading ? (
+        <Loader />
       ) : (
-        <p className="text-heading2-bold">Create Collection</p>
+        <div className="p-10">
+          {initialData ? (
+            <div className="flex items-center justify-between">
+              <p className="text-heading2-bold">Edit Collection</p>
+              <Delete id={initialData._id} item="collection" />
+            </div>
+          ) : (
+            <p className="text-heading2-bold">Create Collection</p>
+          )}
+          <Separator className="bg-grey-1 mt-4 mb-7" />
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Title"
+                        {...field}
+                        onKeyDown={handleKeyPress}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Description"
+                        {...field}
+                        rows={5}
+                        onKeyDown={handleKeyPress}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Image</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value ? [field.value] : []}
+                        onChange={(url) => field.onChange(url)}
+                        onRemove={() => field.onChange("")}
+                      />
+                    </FormControl>
+                    <FormMessage />
+
+                    <div className="flex gap-4">
+                      {field.value && (
+                        <Button type="submit" className="bg-blue-1 text-white">
+                          Submit
+                        </Button>
+                      )}
+                      <Button
+                        type="button"
+                        onClick={() => router.push("/admin/collections")}
+                        className="bg-red-1 text-white"
+                      >
+                        Discard
+                      </Button>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+        </div>
       )}
-      <Separator className="bg-grey-1 mt-4 mb-7" />
-      <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title</FormLabel>
-                <FormControl>
-                  <Input placeholder="Title" {...field} onKeyDown={handleKeyPress} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Description" {...field} rows={5} onKeyDown={handleKeyPress} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="image"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Image</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    value={field.value ? [field.value] : []}
-                    onChange={(url) => field.onChange(url)}
-                    onRemove={() => field.onChange("")}
-                  />
-                </FormControl>
-                <FormMessage />
-                
-                  <div className="flex gap-4">
-                  {field.value && (
-                    <Button type="submit" className="bg-blue-1 text-white">
-                      Submit
-                    </Button>
-                    )}
-                    <Button
-                      type="button"
-                      onClick={() => router.push("/admin/collections")}
-                      className="bg-red-1 text-white"
-                    >
-                      Discard
-                    </Button>
-                  </div>
-                
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-    </div>
-    )
-  }
     </>
   );
 };

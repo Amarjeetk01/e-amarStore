@@ -12,9 +12,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
-import useFetchCartQuantity from "@/lib/hook/useFetchQuantity";
 import useFetchCart from "@/lib/hook/useFetchQuantity";
 
 interface NavbarProps {

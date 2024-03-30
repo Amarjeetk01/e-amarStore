@@ -23,6 +23,7 @@ import Delete from "../custom-ui/Delete";
 import Loader from "../custom-ui/Loader";
 import MultiText from "../custom-ui/MultiText";
 import MultiSelect from "../custom-ui/MultiSelect";
+import { useFetchUser } from "@/lib/hook/useFetchUser";
 
 const formSchema = z.object({
   title: z.string().min(2).max(100),
@@ -50,27 +51,8 @@ const ProductForm: React.FC<ProductFormsProps> = ({ initialData }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [collections, setCollections] = useState<CollectionType[]>([]);
-  const [fetchdata,setFetch]=useState(false)
-  const [user, setUser] = useState<CustomUserType | null>(null);
-
-  const getUser = async () => {
-    try {
-      const res = await fetch('/api/users', {
-        method: "GET",
-      });
-      const data = await res.json();
-      setUser(data);
-    } catch (err) {
-      console.log("[users_GET]", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
-
+  const [fetchdata, setFetch] = useState(false);
+  const { user } = useFetchUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -95,27 +77,24 @@ const ProductForm: React.FC<ProductFormsProps> = ({ initialData }) => {
         },
   });
 
-  const getCollections= async()=>{
-    try{
-        const res=await fetch("/api/collections",{
-            method:"GET"
-        })
-        const data=  await res.json();
-        setCollections(data)
-      
-
-    }catch(err){
-        console.log('[collection_GET]',err)
-    }finally{
-      setLoading(false)
+  const getCollections = async () => {
+    try {
+      const res = await fetch("/api/collections", {
+        method: "GET",
+      });
+      const data = await res.json();
+      setCollections(data);
+    } catch (err) {
+      console.log("[collection_GET]", err);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
   useEffect(() => {
-    if(!fetchdata ){
+    if (!fetchdata) {
       getCollections();
       setFetch(true);
     }
-    
   }, []);
   const handleKeyPress = (
     e:
@@ -128,12 +107,14 @@ const ProductForm: React.FC<ProductFormsProps> = ({ initialData }) => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (user && user.role !== 'admin') {
+    if (user && user.role !== "admin") {
       toast.error("You are not authorized to delete or update.");
     } else {
       try {
         setLoading(true);
-        const url = initialData ? `/api/products/${initialData._id}` : "/api/products";
+        const url = initialData
+          ? `/api/products/${initialData._id}`
+          : "/api/products";
         const res = await fetch(url, {
           method: "POST",
           body: JSON.stringify(values),
@@ -145,7 +126,9 @@ const ProductForm: React.FC<ProductFormsProps> = ({ initialData }) => {
           router.push("/admin/products");
         } else {
           setLoading(false);
-          toast.error(`Failed to ${initialData ? "update" : "create"} product.`);
+          toast.error(
+            `Failed to ${initialData ? "update" : "create"} product.`
+          );
         }
       } catch (err) {
         setLoading(false);
@@ -154,7 +137,6 @@ const ProductForm: React.FC<ProductFormsProps> = ({ initialData }) => {
       }
     }
   };
-  
 
   return (
     <>
@@ -204,7 +186,7 @@ const ProductForm: React.FC<ProductFormsProps> = ({ initialData }) => {
                         onKeyDown={handleKeyPress}
                       />
                     </FormControl>
-                    <FormMessage  className="text-red-1"/>
+                    <FormMessage className="text-red-1" />
                   </FormItem>
                 )}
               />
@@ -227,179 +209,189 @@ const ProductForm: React.FC<ProductFormsProps> = ({ initialData }) => {
                         }
                       />
                     </FormControl>
-                    <FormMessage className="text-red-1"/>
-                  </FormItem>
-                )}
-              />
-             <div className="md:grid md:grid-cols-3 gap-8">
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price ($)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Price"
-                        {...field}
-                        onChange={(e) => {
-                          const value = parseFloat(e.target.value);
-                          if (value < 0) {
-                            field.onChange(0.1);
-                          } else {
-                            field.onChange(value);
-                          }
-                        }}
-                        onKeyDown={handleKeyPress}
-                      />
-                    </FormControl>
                     <FormMessage className="text-red-1" />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="expense"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cost ($)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Expense"
-                        {...field}
-                        onKeyDown={handleKeyPress}
-                        onChange={(e) => {
-                          const value = parseFloat(e.target.value);
-                          if (value < 0) {
-                            field.onChange(0.1);
-                          } else {
-                            field.onChange(value);
-                          }
-                        }}
-                      />
-                      
-                    </FormControl>
-                    <FormMessage className="text-red-1"/>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Category"
-                        {...field}
-                        onKeyDown={handleKeyPress}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-1" />
-                  </FormItem>
-                )}
-              />
+              <div className="md:grid md:grid-cols-3 gap-8">
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Price ($)</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Price"
+                          {...field}
+                          onChange={(e) => {
+                            const value = parseFloat(e.target.value);
+                            if (value < 0) {
+                              field.onChange(0.1);
+                            } else {
+                              field.onChange(value);
+                            }
+                          }}
+                          onKeyDown={handleKeyPress}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-1" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="expense"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cost ($)</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Expense"
+                          {...field}
+                          onKeyDown={handleKeyPress}
+                          onChange={(e) => {
+                            const value = parseFloat(e.target.value);
+                            if (value < 0) {
+                              field.onChange(0.1);
+                            } else {
+                              field.onChange(value);
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-1" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Category"
+                          {...field}
+                          onKeyDown={handleKeyPress}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-1" />
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="md:grid md:grid-cols-3 gap-8">
-                
-              <FormField
-                control={form.control}
-                name="tags"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tags</FormLabel>
-                    <FormControl>
-                    <MultiText
-                      placeholder="Tags"
-                      value={field.value}
-                      onChange={(tag) => field.onChange([...field.value, tag])}
-                      onRemove={(tagToRemove) =>
-                        field.onChange([
-                          ...field.value.filter((tag) => tag !== tagToRemove),
-                        ])
-                      }
-                    />
-                    </FormControl>
-                    <FormMessage className="text-red-1" />
-                  </FormItem>
+                <FormField
+                  control={form.control}
+                  name="tags"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tags</FormLabel>
+                      <FormControl>
+                        <MultiText
+                          placeholder="Tags"
+                          value={field.value}
+                          onChange={(tag) =>
+                            field.onChange([...field.value, tag])
+                          }
+                          onRemove={(tagToRemove) =>
+                            field.onChange([
+                              ...field.value.filter(
+                                (tag) => tag !== tagToRemove
+                              ),
+                            ])
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-1" />
+                    </FormItem>
+                  )}
+                />
+                {collections.length > 0 && (
+                  <FormField
+                    control={form.control}
+                    name="collections"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Collection</FormLabel>
+                        <FormControl>
+                          <MultiSelect
+                            placeholder="Select collection"
+                            collections={collections}
+                            value={field.value}
+                            onChange={(_id) =>
+                              field.onChange([...field.value, _id])
+                            }
+                            onRemove={(idToRemove) =>
+                              field.onChange([
+                                ...field.value.filter(
+                                  (collectionId) => collectionId !== idToRemove
+                                ),
+                              ])
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-1" />
+                      </FormItem>
+                    )}
+                  />
                 )}
-              />
-              {collections.length> 0 && (
-               <FormField
-                control={form.control}
-                name="collections"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Collection</FormLabel>
-                    <FormControl>
-                    <MultiSelect
-                        placeholder="Select collection"
-                        collections={collections}
-                        value={field.value}
-                        onChange={(_id) =>
-                          field.onChange([...field.value, _id])
-                        }
-                        onRemove={(idToRemove) =>
-                          field.onChange([
-                            ...field.value.filter(
-                              (collectionId) => collectionId !== idToRemove
-                            ),
-                          ])
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-1"/>
-                  </FormItem>
-                )}
-              />
-              )}
-               <FormField
-                control={form.control}
-                name="colors"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Colors</FormLabel>
-                    <FormControl>
-                    <MultiText
-                      placeholder="Colors"
-                      value={field.value}
-                      onChange={(color) => field.onChange([...field.value, color])}
-                      onRemove={(colorToRemove) =>
-                        field.onChange([
-                          ...field.value.filter((color) => color !== colorToRemove),
-                        ])
-                      }
-                    />
-                    </FormControl>
-                    <FormMessage className="text-red-1"/>
-                  </FormItem>
-                )}
-              />
-               <FormField
-                control={form.control}
-                name="sizes"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Sizes</FormLabel>
-                    <FormControl>
-                    <MultiText
-                      placeholder="Sizes"
-                      value={field.value}
-                      onChange={(size) => field.onChange([...field.value, size])}
-                      onRemove={(sizeToRemove) =>
-                        field.onChange([
-                          ...field.value.filter((size) => size !== sizeToRemove),
-                        ])
-                      }
-                    />
-                    </FormControl>
-                    <FormMessage className="text-red-1"/>
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="colors"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Colors</FormLabel>
+                      <FormControl>
+                        <MultiText
+                          placeholder="Colors"
+                          value={field.value}
+                          onChange={(color) =>
+                            field.onChange([...field.value, color])
+                          }
+                          onRemove={(colorToRemove) =>
+                            field.onChange([
+                              ...field.value.filter(
+                                (color) => color !== colorToRemove
+                              ),
+                            ])
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-1" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="sizes"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sizes</FormLabel>
+                      <FormControl>
+                        <MultiText
+                          placeholder="Sizes"
+                          value={field.value}
+                          onChange={(size) =>
+                            field.onChange([...field.value, size])
+                          }
+                          onRemove={(sizeToRemove) =>
+                            field.onChange([
+                              ...field.value.filter(
+                                (size) => size !== sizeToRemove
+                              ),
+                            ])
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-1" />
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="flex gap-4">
                 <Button type="submit" className="bg-blue-1 text-white">

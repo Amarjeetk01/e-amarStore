@@ -1,5 +1,4 @@
 import Collection from "@/lib/models/collections";
-import Product from "@/lib/models/products";
 import { connectToDB } from "@/lib/mongoDB";
 import { auth } from "@clerk/nextjs";
 
@@ -39,13 +38,15 @@ export const POST = async (req:NextRequest)=>{
 
 export const GET = async (req: NextRequest) => {
     try {
-        await connectToDB();
-        const collections = await Collection.find().sort({ createdAt: "desc" })
-        .populate({ path: "products", model: Product })
-          .select(" -__v");
-        return new NextResponse(JSON.stringify(collections), { status: 200 });
+      await connectToDB()
+  
+      const collections = await Collection.find().sort({ createdAt: "desc" })
+  
+      return NextResponse.json(collections, { status: 200 })
     } catch (err) {
-        console.log("[collect_GET]", err);
-        return new NextResponse("Internal Server Error", { status: 500 });
+      console.log("[collections_GET]", err)
+      return new NextResponse("Internal Server Error", { status: 500 })
     }
-}
+  }
+  
+  export const dynamic = "force-dynamic";

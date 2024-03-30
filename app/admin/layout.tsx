@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: "amarStore E-Commerce web-app",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

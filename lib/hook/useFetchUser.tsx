@@ -4,39 +4,32 @@ import { useEffect, useState } from "react";
 type CustomUserType = {
   clerkId: string;
   role: string;
+  wishlist: [string];
+  createdAt: string;
 };
 
-const useFetchUser = () => {
+export const useFetchUser = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<CustomUserType | null>(null);
 
   const getUser = async () => {
-    setLoading(true); 
     try {
       const res = await fetch("/api/users", {
         method: "GET",
       });
-      if (!res.ok) {
-        throw new Error("Failed to fetch user data");
-      }
       const data = await res.json();
       setUser(data);
     } catch (err) {
-      console.error("[users_GET]", err);
+      console.log("[users_GET]", err);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   useEffect(() => {
+    setLoading(true);
     getUser();
   }, []);
 
-  return {
-    loading,
-    user,
-    getUser,
-  };
+  return { user, loading };
 };
-
-export default useFetchUser;

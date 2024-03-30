@@ -17,14 +17,14 @@ const useFetchCart = () => {
         const res = await fetch("/api/carts", {
           method: "GET",
         });
-        const data = await res.json();
+        if(res.ok){
+          const data = await res.json();
         setCarts(data);
         setQuantity(data.length);
-        setLoading(false);
+        }
       }
     } catch (err) {
       console.error("Error fetching cart data:", err);
-      setLoading(false);
     } finally {
       setLoading(false);
     }

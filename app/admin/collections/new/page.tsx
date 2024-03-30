@@ -1,7 +1,8 @@
 'use client'
 import CollectionForm from "@/components/collections/CollectionForm";
 import Loader from "@/components/custom-ui/Loader";
-import { useEffect, useState } from "react";
+import { useFetchUser } from "@/lib/hook/useFetchUser";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 type CustomUserType = {
@@ -11,25 +12,7 @@ type CustomUserType = {
 
 const CreateCollection = () => {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<CustomUserType | null>(null);
-
-  const getUser = async () => {
-    try {
-      const res = await fetch('/api/users', {
-        method: "GET",
-      });
-      const data = await res.json();
-      setUser(data);
-    } catch (err) {
-      console.log("[users_GET]", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
+  const { user } = useFetchUser();
 
   return loading ? (
     <Loader />

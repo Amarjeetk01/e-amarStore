@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Collections from "@/components/Collections";
 import ProductList from "@/components/ProductList";
 import { useUser } from "@clerk/nextjs";
@@ -8,7 +8,8 @@ import { useEffect } from "react";
 export default function Home() {
   const { user } = useUser();
   const getUser = async () => {
-    try { await fetch("/api/users");
+    try {
+      await fetch("/api/users");
     } catch (err) {
       console.log("[users_GET]", err);
     }
@@ -22,14 +23,12 @@ export default function Home() {
   return (
     <div>
       <div className="h-[90vh] w-auto object-contain relative">
-        <Image src={`/banner.jpeg`} alt="banner" fill/>
+        <Image src={`/banner.jpeg`} alt="banner" fill />
       </div>
       <div>
-      <Collections />
-      <ProductList/>
+        <Collections />
+        <ProductList />
       </div>
-      
-      
-      </div>
+    </div>
   );
 }
