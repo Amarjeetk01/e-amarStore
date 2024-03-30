@@ -11,15 +11,18 @@ Amarstore is a web application for online shopping, featuring authentication pow
    cd amarstore
    npm install
 Additional Steps:
-* Set up environment variables (e.g., API keys for Clerk and Stripe).
-* Configure Clerk and Stripe according to their documentation.
+- Set up environment variables (e.g., API keys for Clerk and Stripe).
+- Configure Clerk and Stripe according to their documentation.
 
-Usage
-  Development
-  To run the application in development mode:
+## Usage
 
-  ```bash
-  npm run dev
+### Development
+
+To run the application in development mode:
+
+```bash
+npm run dev
+
 
 This command starts the development server.
 
@@ -30,12 +33,12 @@ To build the application for production:
 ```bash
 npm run build
 
-Running
+## Running
 To start the production server:
 ```bash
 npm start
 
-Linting
+## Linting
 To lint the code:
 ```bash
 npm run lint
