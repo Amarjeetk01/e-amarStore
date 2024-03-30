@@ -39,6 +39,17 @@ const Navbar = () => {
     setDropdownMenu(false);
   };
 
+  const handleSearch = () => {
+    router.push(`/search/${query}`)
+    setQuery("")
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && query!=="") {
+      handleSearch();
+    }
+  };
+
   return (
     <>
       <div className="sticky top-0 z-10 py-2 px-10 flex gap-2 justify-between items-center bg-white max-sm:px-2 shadow-lg">
@@ -82,10 +93,11 @@ const Navbar = () => {
             placeholder="Search..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <button
             disabled={query === ""}
-            onClick={() => router.push(`/search/${query}`)}
+            onClick={handleSearch}
           >
             <Search className="cursor-pointer h-4 w-4 hover:text-red-1" />
           </button>
