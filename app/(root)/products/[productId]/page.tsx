@@ -80,7 +80,6 @@ const ProductDetails = ({
                 
               >
                 <CarouselContent className="mt-8">
-                  {/* <div className="flex flex-wrap justify-start gap-16 mx-auto mt-8"> */}
                   {related.map((product: ProductType) => (
                     <CarouselItem
                       key={product._id}
@@ -89,7 +88,6 @@ const ProductDetails = ({
                       <ProductCard product={product} />
                     </CarouselItem>
                   ))}
-                  {/* </div> */}
                 </CarouselContent>
                 <CarouselPrevious />
                 <CarouselNext />
