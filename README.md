@@ -22,9 +22,9 @@ Amarstore is a web application for online shopping, featuring authentication pow
 
 To run the application in development mode:
 
-````bash
+```bash
 npm run dev
-
+```
 
 This command starts the development server.
 
@@ -32,21 +32,21 @@ This command starts the development server.
 
 To build the application for production:
 
-````bash
+```bash
 npm run build
-
+```
 
 ## Running
 To start the production server:
-````bash
+```bash
 npm start
-
+```
 
 ## Linting
 To lint the code:
-````bash
+```bash
 npm run lint
-
+```
 ## Technologies Used
 
 * Next.js (with TypeScript)
