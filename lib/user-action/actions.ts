@@ -1,5 +1,5 @@
 
-const url=process.env.ECOMMERCE_STORE_URL || "http://localhost:3000"
+const url=process.env.ECOMMERCE_STORE_URL || "https://e-amar-store-383mhgllv-amarjeetk01.vercel.app/"
 export const getUser = async () => {
     const users = await fetch(`${url}/api/users`)
     return await users.json()
