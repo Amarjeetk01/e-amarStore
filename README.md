@@ -32,17 +32,19 @@ This command starts the development server.
 
 To build the application for production:
 
-```bash
+````bash
 npm run build
+
 
 ## Running
 To start the production server:
-```bash
+````bash
 npm start
+
 
 ## Linting
 To lint the code:
-```bash
+````bash
 npm run lint
 
 ## Technologies Used
