@@ -11,8 +11,7 @@ type CustomUserType = {
 };
 
 const CreateCollection = () => {
-  const [loading, setLoading] = useState(false);
-  const { user } = useFetchUser();
+  const { user,loading } = useFetchUser();
 
   return loading ? (
     <Loader />

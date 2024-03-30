@@ -19,6 +19,8 @@ const OrderDetails = ({ params }: { params: { orderId: string } }) => {
       setLoading(false);
     } catch (err) {
       console.log("[orderId_GET]", err);
+    }finally{
+      setLoading(false)
     }
   };
   useEffect(() => {

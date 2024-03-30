@@ -31,6 +31,8 @@ const Products = () => {
       setLoading(false);
     } catch (err) {
       console.log("[products_GET]", err);
+    }finally{
+      setLoading(false)
     }
   };
 

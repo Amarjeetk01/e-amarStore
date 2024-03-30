@@ -19,6 +19,8 @@ const CollectionDetail = ({params}:{params:{collectionId:string}}) => {
 
     }catch(err){
         console.log("[collectionId_GET]",err)
+    }finally{
+      setLoading(false)
     }
   }
   useEffect(()=>{

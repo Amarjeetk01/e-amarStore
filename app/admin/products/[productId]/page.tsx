@@ -23,6 +23,8 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       setLoading(false);
     } catch (err) {
       console.log("[productId_GET]", err);
+    }finally{
+      setLoading(false)
     }
   };
   useEffect(() => {

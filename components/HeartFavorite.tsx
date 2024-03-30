@@ -27,6 +27,8 @@ const HeartFavorite = ({ product, updateSignedInUser }: HeartFavoriteProps) => {
       setLoading(false);
     } catch (err) {
       console.log("[users_GET]", err);
+    }finally{
+      setLoading(false)
     }
   };
 

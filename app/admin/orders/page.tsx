@@ -20,6 +20,8 @@ const Orders = () => {
       setLoading(false);
     } catch (err) {
       console.log("[orders_GET]", err);
+    }finally{
+      setLoading(false)
     }
   };
 
