@@ -1,10 +1,10 @@
 "use client";
-import { auth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Orders = () => {
-  const { userId } = auth();
+  const {user}=useUser()
   const [orders, setOrders] = useState<any>(null);
 
   const getOrders = async () => {
@@ -21,10 +21,10 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    if (userId) {
+    if (user) {
       getOrders();
     }
-  }, [userId]);
+  }, [user]);
 
   return (
     <div className="px-10 py-5 max-sm:px-3">
