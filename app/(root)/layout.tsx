@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: "amarStore E-Commerce web-app",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: Readonly<{

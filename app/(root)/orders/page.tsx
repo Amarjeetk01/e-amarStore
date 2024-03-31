@@ -16,11 +16,12 @@ const Orders = () => {
       const data = await res.json();
       setOrders(data);
     } catch (err) {
-      console.error("[orders_GET]", err);
+      console.error("[ordersCustomers_GET]", err);
     }
   };
 
   useEffect(() => {
+
     if (user) {
       getOrders();
     }
@@ -104,5 +105,5 @@ const Orders = () => {
   );
 };
 
+export const dynamic = "force-dynamic"
 export default Orders;
-export const dynamic = "force-dynamic";

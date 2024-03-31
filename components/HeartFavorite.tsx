@@ -18,25 +18,26 @@ const HeartFavorite = ({ product, updateSignedInUser }: HeartFavoriteProps) => {
   const [loading, setLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
 
-  const getUser = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch("/api/users");
-      const data = await res.json();
-      setIsLiked(data.wishlist.includes(product._id));
-      setLoading(false);
-    } catch (err) {
-      console.log("[users_GET]", err);
-    }finally{
-      setLoading(false)
-    }
-  };
+
 
   useEffect(() => {
-    if (user) {
+    const getUser = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/users");
+        const data = await res.json();
+        setIsLiked(data.wishlist.includes(product._id));
+        setLoading(false);
+      } catch (err) {
+        console.log("[users_GET]", err);
+      }finally{
+        setLoading(false)
+      }
+    };
+    if (user && product._id) {
       getUser();
     }
-  }, [user]);
+  }, [user, product._id]);
 
   const handleLike = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();

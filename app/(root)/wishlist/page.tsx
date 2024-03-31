@@ -40,7 +40,6 @@ const Wishlist = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!user) return;
       try {
         setLoading(true);
         const userData = await fetchUserData();
@@ -61,7 +60,9 @@ const Wishlist = () => {
         setLoading(false);
       }
     };
-    fetchData();
+    if (user) {
+      fetchData();
+    }
   }, [user]);
 
   return (

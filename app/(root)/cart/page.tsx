@@ -86,7 +86,7 @@ const Cart = () => {
       getCart();
       
     }
-  }, [user]);
+  }, [user, getCart]);
 
   return loading ? (
     <Loader />
@@ -193,5 +193,7 @@ const Cart = () => {
     </div>
   );
 };
+
+export const dynamic = "force-dynamic"
 
 export default Cart;

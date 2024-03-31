@@ -18,25 +18,26 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<ProductType[]>([]);
 
-  const getProducts = async () => {
-    try {
-      const res = await fetch("/api/products", {
-        method: "GET",
-      });
-      if(!res.ok){
-        throw new Error("Failed to fetch products data");
-      }
-      const data = await res.json();
-      setProducts(data);
-      setLoading(false);
-    } catch (err) {
-      console.log("[products_GET]", err);
-    }finally{
-      setLoading(false)
-    }
-  };
+
 
   useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await fetch("/api/products", {
+          method: "GET",
+        });
+        if(!res.ok){
+          throw new Error("Failed to fetch products data");
+        }
+        const data = await res.json();
+        setProducts(data);
+        setLoading(false);
+      } catch (err) {
+        console.log("[products_GET]", err);
+      }finally{
+        setLoading(false)
+      }
+    };
     getProducts();
   }, []);
 

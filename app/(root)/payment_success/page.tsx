@@ -3,7 +3,7 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SuccessfulPayment = () => {
   const { user } = useUser();
@@ -11,23 +11,23 @@ const SuccessfulPayment = () => {
   const [tokenIsValid, setTokenIsValid] = useState(false);
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-
-  const isTokenValid = async () => {
-    try {
-      const res = await fetch("/api/payment-success", {
-        method: "POST",
-        body: JSON.stringify({ token:token }),
-      });
-      if (res.ok) {
-        setTokenIsValid(true);
-      }
-    } catch (err) {
-      console.error("[cart-clear]", err);
-      router.push("/");
-    }
-  };
+  const routerRef = useRef(router);
 
   useEffect(() => {
+    const isTokenValid = async () => {
+      try {
+        const res = await fetch("/api/payment-success", {
+          method: "POST",
+          body: JSON.stringify({ token }),
+        });
+        if (res.ok) {
+          setTokenIsValid(true);
+        }
+      } catch (err) {
+        console.error("[cart-clear]", err);
+        routerRef.current.push("/");
+      }
+    };
     if (user && token) {
       isTokenValid();
     }

@@ -10,22 +10,24 @@ const OrderDetails = ({ params }: { params: { orderId: string } }) => {
   const [orderDetails, setOrderDetails] = useState<any | null>(null);
   const [customer, setCustomer] = useState<CustomerType | null>(null);
   
-  const getOrderDetails = async () => {
-    try {
-      const res = await fetch(`/api/orders/${params.orderId}`);
-      const { orderDetails, customer } = await res.json();
-      setOrderDetails(orderDetails);
-      setCustomer(customer);
-      setLoading(false);
-    } catch (err) {
-      console.log("[orderId_GET]", err);
-    }finally{
-      setLoading(false)
-    }
-  };
   useEffect(() => {
+    const getOrderDetails = async () => {
+      try {
+        const res = await fetch(`/api/orders/${params.orderId}`);
+        const { orderDetails, customer } = await res.json();
+        setOrderDetails(orderDetails);
+        setCustomer(customer);
+        setLoading(false);
+      } catch (err) {
+        console.log("[orderId_GET]", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
     getOrderDetails();
-  }, []);
+  }, [params.orderId]);
+  
   return loading ? (
     <Loader />
   ) : (

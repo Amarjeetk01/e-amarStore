@@ -6,20 +6,21 @@ const SearchProducts = ({ params }: { params: { query: string } }) => {
   const [searchedProducts, setSearchedProducts] = useState<any>(null);
   const decodedQuery = decodeURIComponent(params.query);
 
-  const getSearchProducts = async () => {
-    try {
-      const res = await fetch(`/api/search/${params.query}`);
-      if (!res.ok) {
-        throw new Error("Not found");
-      }
-      const data = await res.json();
-      setSearchedProducts(data);
-    } catch (err) {
-      console.log("[searchproduct_GET]", err);
-    }
-  };
+
 
   useEffect(() => {
+    const getSearchProducts = async () => {
+      try {
+        const res = await fetch(`/api/search/${params.query}`);
+        if (!res.ok) {
+          throw new Error("Not found");
+        }
+        const data = await res.json();
+        setSearchedProducts(data);
+      } catch (err) {
+        console.log("[searchproduct_GET]", err);
+      }
+    };
     getSearchProducts();
   }, [params.query]);
 

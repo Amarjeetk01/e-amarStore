@@ -1,5 +1,4 @@
-"use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 
@@ -8,7 +7,8 @@ const useFetchCart = () => {
   const [quantity, setQuantity] = useState(0);
   const [loading, setLoading] = useState(true);
   const [carts, setCarts] = useState<any[]>([]);
-  const getCart = async () => {
+
+  const getCart = useCallback(async () => {
     try {
       if (!user) {
         toast.error("Unauthorized!");
@@ -16,10 +16,10 @@ const useFetchCart = () => {
         const res = await fetch("/api/carts", {
           method: "GET",
         });
-        if(res.ok){
+        if (res.ok) {
           const data = await res.json();
-        setCarts(data);
-        setQuantity(data.length);
+          setCarts(data);
+          setQuantity(data.length);
         }
       }
     } catch (err) {
@@ -27,26 +27,27 @@ const useFetchCart = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   const updateCartItemQuantity = async (id: string, quantity: number) => {
     try {
       if (!user) {
         toast.error("Unauthorized!");
-      } else {
-        const res = await fetch("/api/carts", {
-          method: "POST",
-          body: JSON.stringify({ productId: id, quantity }),
-        });
-        if (res.ok) {
-          const updatedCarts = carts.map((cartItem) =>
+        return;
+      }
+
+      const res = await fetch("/api/carts", {
+        method: "POST",
+        body: JSON.stringify({ productId: id, quantity }),
+      });
+      if (res.ok) {
+        setCarts((prevCarts) =>
+          prevCarts.map((cartItem) =>
             cartItem.product._id === id ? { ...cartItem, quantity } : cartItem
-          );
-          setCarts(updatedCarts);
-        } else {
-          toast.error("Failed to update cart item quantity");
-          throw new Error("Failed to update cart item quantity");
-        }
+          )
+        );
+      } else {
+        toast.error("Failed to update cart item quantity");
       }
     } catch (err) {
       toast.error("Something went wrong");
@@ -58,22 +59,21 @@ const useFetchCart = () => {
     try {
       if (!user) {
         toast.error("Unauthorized!");
+        return;
+      }
+
+      const res = await fetch("/api/carts", {
+        method: "DELETE",
+        body: JSON.stringify({ productId: id }),
+      });
+      if (res.ok) {
+        setCarts((prevCarts) =>
+          prevCarts.filter((cartItem) => cartItem.product._id !== id)
+        );
+        setQuantity((prevQuantity) => Math.max(0, prevQuantity - 1));
+        toast.success("Item successfully removed!");
       } else {
-        const res = await fetch("/api/carts", {
-          method: "DELETE",
-          body: JSON.stringify({ productId: id }),
-        });
-        if (res.ok) {
-          const updatedCarts = carts.filter(
-            (cartItem) => cartItem.product._id !== id
-          );
-          setCarts(updatedCarts);
-          setQuantity(updatedCarts.length);
-          toast.success("Item succefully removed!");
-        } else {
-          toast.error("Failed to delete cart item");
-          throw new Error("Failed to delete cart item");
-        }
+        toast.error("Failed to delete cart item");
       }
     } catch (err) {
       console.error("[cart_DELETE]", err);
@@ -104,7 +104,8 @@ const useFetchCart = () => {
     if (user) {
       getCart();
     }
-  }, [user]);
+  }, [user, getCart]);
+
   return {
     quantity,
     loading,

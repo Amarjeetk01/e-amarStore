@@ -1,4 +1,5 @@
 import { Facebook, InstagramIcon, TwitterIcon } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 const Footer: React.FC = () => {
@@ -6,9 +7,9 @@ const Footer: React.FC = () => {
     <>
     <footer className="bg-gray-800 text-white py-8 px-8 bottom-0">
       <div className="mb-4">
-      <img src="/logo.png" className="mr-5 h-6 sm:h-9" alt="logo" />
+      <Image src="/logo.png" width={50} height={50} className="mr-5" alt="logo" />
         <p className="max-w-xs mt-4 text-sm opacity-60">
-        Shop 'til you drop, then shop some more.
+        Shop &apos;til you drop, then shop some more.
         </p>
       </div>
       <div className="container mx-auto flex justify-between items-center max-md:flex-col-reverse">

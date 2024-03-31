@@ -57,7 +57,7 @@ const ProductDetails = ({
     };
 
     fetchDataAsync();
-  }, []);
+  }, [params.productId]);
 
   return (
     <>

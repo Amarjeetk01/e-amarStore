@@ -10,26 +10,27 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
     null
   );
 
-  const getProductDetails = async () => {
-    try {
-      const res = await fetch(`/api/products/${params.productId}`, {
-        method: "GET",
-      });
-      if(!res.ok){
-        throw new Error("Failed to fetch product data");
-      }
-      const data = await res.json();
-      setProductDetails(data);
-      setLoading(false);
-    } catch (err) {
-      console.log("[productId_GET]", err);
-    }finally{
-      setLoading(false)
-    }
-  };
+
   useEffect(() => {
+    const getProductDetails = async () => {
+      try {
+        const res = await fetch(`/api/products/${params.productId}`, {
+          method: "GET",
+        });
+        if(!res.ok){
+          throw new Error("Failed to fetch product data");
+        }
+        const data = await res.json();
+        setProductDetails(data);
+        setLoading(false);
+      } catch (err) {
+        console.log("[productId_GET]", err);
+      }finally{
+        setLoading(false)
+      }
+    };
     getProductDetails();
-  }, []);
+  }, [params.productId]);
   return loading ? (
     <Loader />
   ) : (

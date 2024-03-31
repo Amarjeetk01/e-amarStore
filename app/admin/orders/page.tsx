@@ -10,6 +10,7 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<OrderColumnType[]>([]);
 
+
   const getOrders = async () => {
     try {
       const res = await fetch("/api/orders", {
@@ -19,13 +20,14 @@ const Orders = () => {
       setOrders(data);
       setLoading(false);
     } catch (err) {
-      console.log("[orders_GET]", err);
+      console.log("[ordersAdmin_GET]", err);
     }finally{
       setLoading(false)
     }
   };
-
+  
   useEffect(() => {
+
     getOrders();
   }, []);
 

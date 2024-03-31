@@ -20,7 +20,7 @@ export const GET = async (req: NextRequest) => {
     
     return NextResponse.json(customers, { status: 200 });
   } catch (err) {
-    console.log("[orders_GET]", err);
+    console.log("[customers_GET]", err);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };

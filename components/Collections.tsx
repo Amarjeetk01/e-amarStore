@@ -6,21 +6,22 @@ import Loader from "./custom-ui/Loader";
 const Collections = () => {
   const [loading,setLoading]=useState(true)
   const [collections,setCollections]=useState<any>(null)
-  const getCollection= async ()=>{
-    try{
-      const res=await fetch(`/api/collections`)
-      if(!res.ok){
-        throw new Error("Failed to fetch collections data");
-      }
-      const data= await res.json()
-      setCollections(data)
-    }catch(err){
-      console.log("[collection_get]",err)
-    }finally{
-      setLoading(false)
-    }
-  }
+
   useEffect(()=>{
+    const getCollection= async ()=>{
+      try{
+        const res=await fetch(`/api/collections`)
+        if(!res.ok){
+          throw new Error("Failed to fetch collections data");
+        }
+        const data= await res.json()
+        setCollections(data)
+      }catch(err){
+        console.log("[collection_get]",err)
+      }finally{
+        setLoading(false)
+      }
+    }
     getCollection()
   },[])
 

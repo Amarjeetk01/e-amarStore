@@ -5,8 +5,10 @@ import Loader from "@/components/custom-ui/Loader";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/custom-ui/DataTable";
 import { columns } from "@/components/customers/CustomersColumn";
+import { useUser } from "@clerk/nextjs";
 
 const Orders = () => {
+  const {user}=useUser()
   const [loading, setLoading] = useState(true);
   const [customers, setCustomers] = useState<CustomerType[]>([]);
 
@@ -19,15 +21,18 @@ const Orders = () => {
       setCustomers(data);
       setLoading(false);
     } catch (err) {
-      console.log("[orders_GET]", err);
+      console.log("[customersPage_GET]", err);
     }finally{
       setLoading(false)
     }
   };
-
+  
   useEffect(() => {
-    getCustomers();
-  }, []);
+
+    if(user){
+      getCustomers();
+    }
+  }, [user]);
 
   return loading ? (
     <Loader />

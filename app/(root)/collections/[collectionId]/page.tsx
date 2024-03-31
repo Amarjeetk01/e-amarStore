@@ -11,23 +11,24 @@ const CollectionDetails = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const [collectionDetails, setCollectionDetails] = useState<any>(null);
-  const getCollectionDetails = async () => {
-    try {
-      const res = await fetch(`/api/collections/${params.collectionId}`);
-      if (!res.ok) {
-        throw new Error("Failed to fetch collections data");
-      }
-      const data =await res.json();
-      setCollectionDetails(data);
-    } catch (err) {
-      console.log("[collectionId_get]", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+
   useEffect(() => {
+    const getCollectionDetails = async () => {
+      try {
+        const res = await fetch(`/api/collections/${params.collectionId}`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch collections data");
+        }
+        const data =await res.json();
+        setCollectionDetails(data);
+      } catch (err) {
+        console.log("[collectionId_get]", err);
+      } finally {
+        setLoading(false);
+      }
+    };
     getCollectionDetails();
-  }, []);
+  }, [params.collectionId]);
 
   return loading ? (
     <Loader />

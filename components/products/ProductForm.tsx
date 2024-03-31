@@ -77,25 +77,26 @@ const ProductForm: React.FC<ProductFormsProps> = ({ initialData }) => {
         },
   });
 
-  const getCollections = async () => {
-    try {
-      const res = await fetch("/api/collections", {
-        method: "GET",
-      });
-      const data = await res.json();
-      setCollections(data);
-    } catch (err) {
-      console.log("[collection_GET]", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+
   useEffect(() => {
+    const getCollections = async () => {
+      try {
+        const res = await fetch("/api/collections", {
+          method: "GET",
+        });
+        const data = await res.json();
+        setCollections(data);
+      } catch (err) {
+        console.log("[collection_GET]", err);
+      } finally {
+        setLoading(false);
+      }
+    };
     if (!fetchdata) {
       getCollections();
       setFetch(true);
     }
-  }, []);
+  }, [fetchdata]);
   const handleKeyPress = (
     e:
       | React.KeyboardEvent<HTMLInputElement>
