@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/custom-ui/Loader";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/custom-ui/DataTable";
-import { connectToDB } from "@/lib/mongoDB";
-import Customer from "@/lib/models/customer";
 import { columns } from "@/components/customers/CustomersColumn";
 
 const Orders = () => {
