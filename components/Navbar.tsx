@@ -3,11 +3,11 @@
 import { UserButton, useUser } from "@clerk/nextjs";
 import {
   CircleUserRound,
+  LayoutDashboardIcon,
   LogIn,
   Menu,
   Search,
   ShoppingCart,
-  View,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -115,7 +115,7 @@ const Navbar = () => {
             href={user ? "/admin" : "/sign-in"}
             className="flex items-center gap-3 border rounded-lg px-2 py-1 hover:bg-blue-300 hover:text-white max-md:hidden"
           >
-            <View />
+            <LayoutDashboardIcon />
           </Link>
 
           <Menu

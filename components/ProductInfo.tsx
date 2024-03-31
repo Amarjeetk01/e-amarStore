@@ -18,8 +18,7 @@ const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
     productInfo.sizes[0]
   );
   const [quantity, setQuantity] = useState<number>(1);
-  const [isCart, setIsCart] = useState(false);
-  const { checkIsCart } = useFetchCart();
+  const { checkIsCart,getCart } = useFetchCart();
 
   const handleCart = async () => {
     try {
@@ -47,7 +46,7 @@ const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
             size: selectedSize,
           }),
         });
-        setIsCart(true);
+        await getCart();
         toast.success("Item added to cart");
       }
     } catch (err) {

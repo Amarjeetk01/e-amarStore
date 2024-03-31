@@ -47,9 +47,9 @@ export const PUT = async (req: NextRequest) => {
           product_data: {
             name: cartItem.product.title,
             metadata: {
-              productId: cartItem.product._id,
-              ...(cartItem.size && { size: cartItem.size }),
-              ...(cartItem.color && { color: cartItem.color }),
+              productId: cartItem.product._id.toString(),
+              ...(cartItem.size.toString() && { size: cartItem.size.toString() }),
+              ...(cartItem.color.toString() && { color: cartItem.color.toString() }),
             },
           },
           unit_amount: cartItem.product.expense * 100,

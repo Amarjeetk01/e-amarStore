@@ -44,7 +44,9 @@ const Gallery = ({ productMedia }: { productMedia: string[] }) => {
               width={200}
               alt="product"
               className={`w-20 h-20 rounded-lg object-cover cursor-pointer transition-transform duration-300 ${
-                hoveredImage === index ? 'scale-110 border-2 border-black' : ''
+                    mainImage === image ? "border-2 border-gray-800" : ""
+                  } ${
+                hoveredImage === index ? 'scale-110 ' : ''
               }`}
               onMouseEnter={() => setHoveredImage(index)}
               onMouseLeave={() => setHoveredImage(null)}

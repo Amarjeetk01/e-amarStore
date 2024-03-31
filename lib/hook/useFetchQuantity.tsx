@@ -8,7 +8,6 @@ const useFetchCart = () => {
   const [quantity, setQuantity] = useState(0);
   const [loading, setLoading] = useState(true);
   const [carts, setCarts] = useState<any[]>([]);
-
   const getCart = async () => {
     try {
       if (!user) {
