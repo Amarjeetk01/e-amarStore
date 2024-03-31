@@ -9,7 +9,7 @@ const Orders = () => {
 
   const getOrders = async () => {
     try {
-      const res = await fetch(`/api/orders/customers/${userId}`);
+      const res = await fetch(`/api/orders/customers`);
       if (!res.ok) {
         throw new Error("Failed to fetch orders");
       }

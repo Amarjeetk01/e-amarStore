@@ -2,17 +2,16 @@
 import Order from "@/lib/models/order";
 import Product from "@/lib/models/products";
 import { connectToDB } from "@/lib/mongoDB";
+import { auth } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: { customerId: string } }
-) => {
+export const GET = async (req: NextRequest) => {
   try {
+    const {userId}=auth()
     await connectToDB();
 
     const orders = await Order.find({
-      customerClerkId: params.customerId,
+      customerClerkId: userId,
     }).populate({ path: "products.product", model: Product });
 
     return NextResponse.json(orders, { status: 200 });

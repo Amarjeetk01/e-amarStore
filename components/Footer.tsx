@@ -3,7 +3,14 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-800 text-white py-8 px-8">
+    <>
+    <footer className="bg-gray-800 text-white py-8 px-8 bottom-0">
+      <div className="mb-4">
+      <img src="/logo.png" className="mr-5 h-6 sm:h-9" alt="logo" />
+        <p className="max-w-xs mt-4 text-sm opacity-60">
+        Shop 'til you drop, then shop some more.
+        </p>
+      </div>
       <div className="container mx-auto flex justify-between items-center max-md:flex-col-reverse">
         <div className="md:w-2/3 flex justify-between max-md:w-screen max-md:mt-4 max-md:gap-3 max-md:px-4 min-w-[360px]">
           <div className="md:w-1/2">
@@ -57,7 +64,12 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
+      
     </footer>
+    <div className="flex flex-nowrap items-center justify-center bottom-0 bg-gray-500">
+    <p className=" text-xs text-black">© 2024 AmarStore</p>
+    </div>
+    </>
   );
 };
 
